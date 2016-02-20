@@ -1,0 +1,5 @@
+[user]
+        email = jupiter24@users.noreply.github.com
+        name = jupiter24
+[push]
+        default = simple

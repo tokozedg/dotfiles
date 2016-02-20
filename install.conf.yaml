@@ -4,6 +4,7 @@
     ~/.dotfiles: ''
     ~/.config/nvim: neovim/
     ~/.config/fish/config.fish: fish/config.fish
+    ~/.gitconfig: git/config
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
