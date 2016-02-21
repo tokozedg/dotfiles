@@ -11,3 +11,4 @@
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
+  - [fish_update_completions, Creating fish completions from man pages]
