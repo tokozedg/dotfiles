@@ -13,6 +13,8 @@ Plug 'airblade/vim-gitgutter'
 Plug 'mattn/emmet-vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'Valloric/YouCompleteMe', {'do': './install.py'}
+"-----Latex plugins----------------------------------------------
+Plug 'lervag/vimtex'
 "-----Colorschemes-----------------------------------------------
 Plug 'morhetz/gruvbox'
 
@@ -54,6 +56,9 @@ set copyindent
 set preserveindent
 
 autocmd FileType make setlocal noexpandtab
+" wrap long lines in LaTex files
+autocmd FileType tex setlocal textwidth=80
+autocmd FileType tex setlocal formatoptions+=t
 
 "-----Search options---------------------------------------------
 set hlsearch
