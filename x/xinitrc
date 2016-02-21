@@ -1,3 +1,13 @@
 #!/bin/sh
-setxkbmap -layout us,de -option grp:shifts_toggle -option caps:swapescape -option terminate:ctrl_alt_backspace &
+
+# set keyboard layout:
+# us and de layout, use both shift keys to toggle
+# escape and caps lock are swapped (much more comfortable when using vim)
+# Ctrl-Alt-Backspace to termiante X is enabled
+setxkbmap -layout us,de -option grp:shifts_toggle -option caps:swapescape -option terminate:ctrl_alt_bksp
+
+# typematic delay and rate:
+# 250ms delay and 40 Hz rate
+xset r rate 250 40
+
 exec i3

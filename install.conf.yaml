@@ -6,6 +6,8 @@
     ~/.config/fish/config.fish: fish/config.fish
     ~/.gitconfig: git/config
     ~/.xinitrc: x/xinitrc
+    ~/.config/i3/config: i3/config
+    ~/.config/termite/config: termite/config
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
