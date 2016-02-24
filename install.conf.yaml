@@ -8,6 +8,7 @@
     ~/.xinitrc: x/xinitrc
     ~/.config/i3/config: i3/config
     ~/.config/termite/config: termite/config
+    ~/.local/share/fonts/fontawesome.ttf: fonts/fontawesome-webfont.ttf
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
