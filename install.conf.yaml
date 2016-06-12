@@ -4,6 +4,7 @@
     ~/.dotfiles: ''
     ~/.config/nvim: neovim/
     ~/.config/fish/config.fish: fish/config.fish
+    ~/.bash_profile: bash/bash_profile
     ~/.gitconfig: git/config
     ~/.xinitrc: x/xinitrc
     ~/.gtkrc-2.0: gtk/gtkrc-2.0
@@ -11,6 +12,8 @@
     ~/.config/i3/config: i3/config
     ~/.config/termite/config: termite/config
     ~/.local/share/fonts/fontawesome.ttf: fonts/fontawesome-webfont.ttf
+    ~/.spacemacs: spacemacs/spacemacs
+    ~/.emacs.d/private/org-jupyter: spacemacs/org-jupyter/
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]

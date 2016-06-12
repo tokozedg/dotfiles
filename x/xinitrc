@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# start Gnome Keyring
+eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+export SSH_AUTH_SOCK
+
 # set keyboard layout:
 # us and de layout, use both shift keys to toggle
 # escape and caps lock are swapped (much more comfortable when using vim)

@@ -6,6 +6,8 @@ call plug#begin('~/.config/nvim/plugged')
 "-----General plugins--------------------------------------------
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
+Plug 'vim-airline/vim-airline'
+Plug 'ryanoasis/vim-devicons'
 "-----Git plugins------------------------------------------------
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
@@ -13,6 +15,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'mattn/emmet-vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'Valloric/YouCompleteMe', {'do': './install.py'}
+Plug 'scrooloose/syntastic'
 "-----Latex plugins----------------------------------------------
 Plug 'lervag/vimtex'
 "-----Colorschemes-----------------------------------------------
@@ -29,8 +32,17 @@ let g:ctrlp_map = '<c-p>'             " set Ctrl-P to invoke CtrlP
 let g:ctrlp_cmd = 'CtrlPMixed'        " use MRU, Paths and Buffers
 let g:ctrlp_working_path_mode = 'ra'  " use project directory if possible
 
-"-----YouCompleteMe options-------------------------------------
+"-----Airline options-------------------------------------------
+let g:airline_powerline_fonts = 1
+"-----Syntastic options-----------------------------------------
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 "----------------------------------------------------------------------
 " APPEARANCE
 "----------------------------------------------------------------------
@@ -83,6 +95,7 @@ set noswapfile
 "------------------------------------------------------------------------------
 
 let mapleader = ","
+let localmapleader = ";"
 " Smart way to move between windows
 noremap <C-j> <C-W>j
 noremap <C-k> <C-W>k
