@@ -138,6 +138,9 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 bindsym $mod+Shift+s exec "i3-nagbar -t warning -m 'You pressed the shutdown shortcut. Do you really want to shutdown immediately?' -b 'Yes, shutdown' 'shutdown now'"
 bindsym $mod+Shift+b exec "i3lock -d -i ~/.dotfiles/lockscreen.png"
 
+bindsym $mod+Shift+g exec "setxkbmap -layout us,gr,de -option grp:shifts_toggle -option caps:swapescape -option terminate:ctrl_alt_bksp"
+bindsym $mod+Shift+u exec "setxkbmap -layout us,de -option grp:shifts_toggle -option caps:swapescape -option terminate:ctrl_alt_bksp"
+
 # resize window (you can also use the mouse for that)
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
@@ -175,7 +178,6 @@ hide_edge_borders both
 # finds out, if available)
 bar {
         status_command i3status
-        tray_output primary
 }
 
 # Colors:
@@ -189,16 +191,27 @@ for_window [class="Termite"] client.focused #928374 #928374 #000000 #000000
 for_window [class="Termite"] client.focused_inactive #1d2021 #1d2021 #928374 #000000
 for_window [class="Termite"] client.unfocused #1d2021 #1d2021 #928374 #000000
 
+# make sure Guake is floating:
+for_window [class="Main.py"] floating enable
+
 assign [class="Firefox"] $workspace1
-assign [class="Thunderbird"] $workspace2
-assign [class="Emacs"] $workspace3
 assign [class="telegram-desktop"] $workspace6
+assign [class="KeePass2"] $workspace8
 
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 0 +5%
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume 0 -5%
 bindsym XF86AudioMute exec pactl set-sink-mute 0 toggle
+bindsym XF86AudioPlay exec banshee --toggle-playing
+bindsym XF86AudioStop exec banshee --stop
+bindsym XF86AudioPrev exec banshee --previous
+bindsym XF86AudioNext exec banshee --next
 
+# background services:
+exec compton --config ~/.config/compton.conf -b
+exec /usr/lib/notification-daemon-1.0/notification-daemon
+exec dropbox
+exec synapse --startup
+exec emacs --daemon
+exec thunar --daemon
 # Autostart:
-
-exec thunderbird
 exec firefox

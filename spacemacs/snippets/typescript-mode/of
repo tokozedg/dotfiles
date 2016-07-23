@@ -1,0 +1,6 @@
+# key: of
+# name: for-of loop
+# --
+for (let ${1:el} of ${2:collection}) {
+  $0
+}

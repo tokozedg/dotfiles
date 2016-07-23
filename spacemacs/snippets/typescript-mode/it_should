@@ -1,0 +1,6 @@
+# key: it
+# name: it(...) test
+# --
+it('should $1', () => {
+  $0
+});

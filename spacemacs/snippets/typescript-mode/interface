@@ -1,0 +1,6 @@
+# key: in
+# name: export interface
+# --
+export interface $1 {
+  $0
+}

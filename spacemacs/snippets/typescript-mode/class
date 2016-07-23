@@ -1,0 +1,6 @@
+# key: cl
+# name: export class
+# --
+export class $1 {
+  $0
+}

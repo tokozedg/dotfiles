@@ -31,27 +31,31 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     rust
+     haskell
+     shell-scripts
+     mu4e
+     python
+     markdown
      php
      yaml
      html
      javascript
      latex
      org-jupyter
-     ;; ----------------------------------------------------------------
-     ;; Example of useful layers you may want to use right away.
-     ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
-     ;; <M-m f e R> (Emacs style) to install them.
-     ;; ----------------------------------------------------------------
      helm
-     auto-completion
+     (auto-completion :variables
+                      auto-completion-enable-snippets-in-popup t)
      ;; better-defaults
      emacs-lisp
      git
      ;; markdown
      org
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
+     (shell :variables
+            shell-default-height 30
+            shell-default-position 'bottom
+            shell-default-term-shell "/bin/fish"
+            shell-default-shell 'shell)
      ;; spell-checking
      syntax-checking
      typescript
@@ -61,7 +65,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(editorconfig)
    ;; A list of packages that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; Defines the behaviour of Spacemacs when downloading packages.
@@ -113,7 +117,7 @@ values."
    ;; List of items to show in the startup buffer. If nil it is disabled.
    ;; Possible values are: `recents' `bookmarks' `projects' `agenda' `todos'.
    ;; (default '(recents projects))
-   dotspacemacs-startup-lists '(recents projects)
+   dotspacemacs-startup-lists '(agenda todos)
    ;; Number of recent files to show in the startup buffer. Ignored if
    ;; `dotspacemacs-startup-lists' doesn't include `recents'. (default 5)
    dotspacemacs-startup-recent-list-size 5
@@ -289,8 +293,130 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (global-linum-mode)
-  (setq org-default-notes-file "~/notes.org")
+  (setq org-directory "~/Dropbox/org"
+        org-default-notes-file (concat org-directory "/notes.org")
+        org-todo-keywords '((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d)" "CANCELLED(c)"))
+        org-todo-keyword-faces '(
+                                 ("TODO". "#fb4934")
+                                 ("STARTED" . "#fabd2f")
+                                 ("CANCELLED" . "#d3869b")
+                                 ("DONE" . "#b8bb26"))
+        org-enforce-todo-dependencies t
+        )
+
+  (defun my-render-html-message ()
+  (let ((dom (libxml-parse-html-region (point-min) (point-max))))
+    (erase-buffer)
+    (shr-insert-document dom)
+    (goto-char (point-min))))
+  (setq shr-color-visible-luminance-min 80)
+  (setq mu4e-html2text-command 'my-render-html-message)
+  ;;(setq mu4e-html2text-command "pandoc -f html -t plain")
+  (setq mail-user-agent 'mu4e-user-agent
+        mu4e-maildir (expand-file-name "~/.mail")
+        message-kill-buffer-on-exit t
+        mu4e-headers-skip-duplicates t
+        mu4e-sent-messages-behavior 'delete
+        mu4e-compose-dont-reply-to-self t
+        mu4e-get-mail-command "mbsync -a"
+        mu4e-update-interval 120
+        message-send-mail-function 'message-send-mail-with-sendmail
+        mu4e-context-policy 'pick-first
+        mu4e-compose-context-policy 'ask
+        ;; mu4e-alert (variables provided by mu4e layer)
+        mu4e-enable-mode-line t
+        mu4e-enable-notifications t
+        )
+  (setq mu4e-change-filenames-when-moving t)
+
+  ;; This file contains the contexts for mu4e
+  (load-file "~/.dotfiles/spacemacs/mu4e-contexts.el")
+  ;; This sets `mu4e-user-mail-address-list' to the concatenation of all
+  ;; `user-mail-address' values for all contexts. If you have other mail
+  ;; addresses as well, you'll need to add those manually.
+  (setq mu4e-user-mail-address-list
+    (delq nil
+      (mapcar (lambda (context)
+		(when (mu4e-context-vars context)
+		  (cdr (assq 'user-mail-address (mu4e-context-vars context)))))
+	mu4e-contexts)))
+
+  ;; Ask for confirmation if message doesn't have attachment but mentions one
+  ;; http://mbork.pl/2016-02-06_An_attachment_reminder_in_mu4e
+  ;; Also see https://github.com/mbork/message
+  (defun mbork/message-attachment-present-p ()
+    "Return t if an attachment is found in the current message."
+    (save-excursion
+      (save-restriction
+        (widen)
+        (goto-char (point-min))
+        (when (search-forward "<#part" nil t) t))))
+
+  (defcustom mbork/message-attachment-intent-re
+    (regexp-opt '("I attach"
+      "I have attached"
+      "I've attached"
+      "I have included"
+      "I've included"
+      "see the attached"
+      "see the attachment"
+      "attached file"))
+    "A regex which - if found in the message, and if there is no
+  attachment - should launch the no-attachment warning.")
+
+  (defcustom mbork/message-attachment-reminder
+    "Are you sure you want to send this message without any attachment? "
+    "The default question asked when trying to send a message
+  containing `mbork/message-attachment-intent-re' without an
+  actual attachment.")
+
+  (defun mbork/message-warn-if-no-attachments ()
+    "Ask the user if s?he wants to send the message even though
+  there are no attachments."
+    (when (and (save-excursion
+          (save-restriction
+      (widen)
+      (goto-char (point-min))
+      (re-search-forward mbork/message-attachment-intent-re nil t)))
+        (not (mbork/message-attachment-present-p)))
+      (unless (y-or-n-p mbork/message-attachment-reminder)
+        (keyboard-quit))))
+
+  (add-hook 'message-send-hook #'mbork/message-warn-if-no-attachments)
+
+
+  (setq create-lockfiles nil)
+  (editorconfig-mode 1)
+  ;; Fix issues with opening files
+  (persp-mode 1)
+
+  (add-hook 'typescript-mode-hook 'typescript-other-file-spec)
+  (defun typescript-other-file-spec ()
+    "Switch between spec and implementation of typescript files."
+    ;; spec has to end on .spec.ts
+    (setq ff-search-directories '(".")
+          ff-other-file-alist '((".spec\\.ts$" (".ts"))
+                                ("\\.ts$" (".spec.ts"))))
+    ;; use <f9> to switch
+    (local-set-key (kbd "<f9>") 'ff-find-other-file))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(mbork/message-attachment-intent-re (regexp-opt '("im anhang"
+                                                    "im Anhang"
+                                                    "als anhang"
+                                                    "als Anhang"
+                                                    "angehängt")))
+ '(org-agenda-files (quote ("~/Dropbox/org/notes.org"))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
