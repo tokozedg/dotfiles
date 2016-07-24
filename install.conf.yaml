@@ -15,6 +15,7 @@
     ~/.local/share/fonts/fontawesome.ttf: fonts/fontawesome-webfont.ttf
     ~/.spacemacs.d: spacemacs/
     ~/.mbsyncrc: mail/mbsync
+    ~/.config/mpd: mpd/
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
