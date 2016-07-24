@@ -15,6 +15,7 @@
     ~/.local/share/fonts/fontawesome.ttf: fonts/fontawesome-webfont.ttf
     ~/.spacemacs.d: spacemacs/
     ~/.mbsyncrc: mail/mbsync
+    ~/.config/redshift.conf: redshift/redshift.conf
     ~/.config/mpd: mpd/
 
 - shell:

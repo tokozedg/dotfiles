@@ -1,2 +1,4 @@
 /lockscreen.png
 spacemacs/mu4e-contexts.el
+mpd/*
+!mpd/mpd.conf
