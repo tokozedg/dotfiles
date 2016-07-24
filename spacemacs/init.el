@@ -327,6 +327,8 @@ you should place your code here."
         mu4e-enable-mode-line t
         mu4e-enable-notifications t
         )
+  (with-eval-after-load 'mu4e-alert
+    (mu4e-alert-set-default-style 'libnotify))
   (setq mu4e-change-filenames-when-moving t)
 
   ;; This file contains the contexts for mu4e
