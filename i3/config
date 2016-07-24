@@ -13,7 +13,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:DejaVu Sans, FontAwesome 9
+font pango:DejaVu Sans 9
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -177,7 +177,7 @@ hide_edge_borders both
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        status_command i3status
+        status_command conky-i3bar.sh
 }
 
 # Colors:
@@ -201,17 +201,19 @@ assign [class="KeePass2"] $workspace8
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 0 +5%
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume 0 -5%
 bindsym XF86AudioMute exec pactl set-sink-mute 0 toggle
-bindsym XF86AudioPlay exec banshee --toggle-playing
-bindsym XF86AudioStop exec banshee --stop
-bindsym XF86AudioPrev exec banshee --previous
-bindsym XF86AudioNext exec banshee --next
+bindsym XF86AudioPlay exec mpc toggle
+bindsym XF86AudioStop exec mpc stop
+bindsym XF86AudioPrev exec mpc prev
+bindsym XF86AudioNext exec mpc next
 
 # background services:
-exec compton --config ~/.config/compton.conf -b
-exec /usr/lib/notification-daemon-1.0/notification-daemon
-exec dropbox
-exec synapse --startup
-exec emacs --daemon
-exec thunar --daemon
+exec --no-startup-id compton --config ~/.config/compton.conf -b
+exec --no-startup-id /usr/lib/notification-daemon-1.0/notification-daemon
+exec --no-startup-id dropbox
+exec --no-startup-id synapse --startup
+exec --no-startup-id emacs --daemon
+exec --no-startup-id thunar --daemon
+exec --no-startup-id guake
+exec --no-startup-id redshift-gtk
 # Autostart:
 exec firefox
